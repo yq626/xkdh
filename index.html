@@ -1,138 +1,80 @@
-<!DOCTYPE html><html lang="zh-CN"><head>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>学考密码生成器</title>
+    <title>学考导航</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
-            padding: 20px;
+            padding: 0;
             box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
         }
+
+        body {
+            background-color: #f5f7fa;
+            padding: 40px 20px;
+        }
+
         .container {
             max-width: 500px;
             margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
-        .input-group {
-            margin-bottom: 15px;
+
+        .title {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 40px;
         }
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .input-group input {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-        }
-        .generate-button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .generate-button:hover {
-            background-color: #0056b3;
-        }
-        .password-container {
-            margin-top: 15px;
-            display: none; /* 初始隐藏密码容器 */
-        }
-        .password-wrapper {
+
+        .card-box {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #007BFF;
-            border-radius: 4px;
-            background-color: #f0f8ff;
+            flex-direction: column;
+            gap: 20px;
         }
-        .copy-button {
-            padding: 5px 10px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 4px;
+
+        .card {
+            background: white;
+            padding: 28px 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: 0.3s;
             cursor: pointer;
+            text-decoration: none;
+            color: #2c3e50;
+            font-size: 19px;
+            font-weight: bold;
         }
-        .copy-button:hover {
-            background-color: #0056b3;
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
         }
-    </style></head><body>
+
+        .blue { border-left: 6px solid #3498db; }
+        .purple { border-left: 6px solid #9b59b6; }
+        .green { border-left: 6px solid #2ecc71; }
+    </style>
+</head>
+<body>
     <div class="container">
-        <div class="input-group">
-            <label for="letters">请输入考生姓名每个字的首字母:</label>
-            <input type="text" id="letters" maxlength="4" minlength="2" required oninput="hidePasswords()">
+        <div class="title">学考导航</div>
+
+        <div class="card-box">
+            <a href="https://xk.hebeea.edu.cn/" target="_blank" class="card blue">
+                学考报名、缴费、成绩查询
+            </a>
+
+            <a href="https://n6qmwv5d.yichafen.com/qz/M0V39fKlTt" target="_blank" class="card purple">
+                学考考籍号（准考证号）查询
+            </a>
+
+            <a href="https://yq626.github.io/xkmm/" target="_blank" class="card green">
+                密码查询助手
+            </a>
         </div>
-        <div class="input-group">
-            <label for="idNumber">请输入考生身份证号 (18位):</label>
-            <input type="text" id="idNumber" maxlength="18" required oninput="hidePasswords()">
-        </div>
-        <button class="generate-button" onclick="generatePasswords()">生成</button>
-        <div class="password-container" id="passwordContainer"></div>
     </div>
-
-    <script>
-        function generatePasswords() {
-            const letters = document.getElementById('letters').value.trim();
-            const idNumber = document.getElementById('idNumber').value.trim();
-
-            // 验证输入的字母
-            if (!/^[A-Za-z]{2,4}$/.test(letters)) {
-                alert('输入不符合要求，名字几个字，首字母输几个');
-                return;
-            }
-
-            // 验证身份证号
-            if (!/^\d{17}([\dX])$/.test(idNumber)) {
-                alert('身份证号必须是18位，且最后一位如果是x必须大写。');
-                return;
-            }
-
-            // 生成密码
-            const password1 = 'XUEkao' + idNumber.slice(-8);
-            const firstLetterUpper = letters.charAt(0).toUpperCase();
-            const otherLettersLower = letters.slice(1).toLowerCase();
-            const password2 = firstLetterUpper + otherLettersLower + idNumber.slice(6, 14);
-
-            // 显示密码及复制按钮
-            const passwordContainer = document.getElementById('passwordContainer');
-            passwordContainer.innerHTML = `
-                <div class="password-wrapper">
-                    <span>初始密码: ${password1}</span>
-                    <button class="copy-button" onclick="copyToClipboard('${password1}')">复制</button>
-                </div>
-                <div class="password-wrapper">
-                    <span>改后密码: ${password2}</span>
-                    <button class="copy-button" onclick="copyToClipboard('${password2}')">复制</button>
-                </div>
-				 <div class="password-wrapper">                   
-				   	<span>&nbsp;&nbsp;&nbsp;&nbsp;初始密码为首次登录学考平台或重置之后才使用的密码。考生如果已经改过密码，请用改后密码。</span>                   
-                </div>
-            `;
-            passwordContainer.style.display = 'block'; // 显示密码容器
-        }
-
-        function copyToClipboard(text) {
-            const tempTextarea = document.createElement('textarea');
-            tempTextarea.value = text;
-            document.body.appendChild(tempTextarea);
-            tempTextarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempTextarea);
-            alert('密码已复制');
-        }
-
-        function hidePasswords() {
-            const passwordContainer = document.getElementById('passwordContainer');
-            passwordContainer.style.display = 'none'; // 隐藏密码容器
-        }
-    </script></body></html>
+</body>
+</html>
